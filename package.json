@@ -1,0 +1,23 @@
+{
+  "name": "SeaSickServer",
+  "version": "0.0.0",
+  "description": "SeaSickServer =============",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TheGiftsProject/SeaSickServer.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/TheGiftsProject/SeaSickServer/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "ws": "~0.4.31",
+    "lodash": "~2.2.1"
+  }
+}
