@@ -1,7 +1,7 @@
 util = require('util')
 Game = require('./game')
 WebSocketServer = require('ws').Server
-wss = new WebSocketServer({port: 8080})
+wss = new WebSocketServer({port: 8088})
 
 gameInstance = new Game()
 

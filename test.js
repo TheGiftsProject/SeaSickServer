@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var ws = new WebSocket('ws://127.0.0.1:8080');
+var ws = new WebSocket('ws://127.0.0.1:8088');
 
 ws.on('open', function () {
   console.log('connected');
