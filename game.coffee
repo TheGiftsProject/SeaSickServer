@@ -41,10 +41,11 @@ class Game
     bullet = @ships[shipId].fire()
     @bullets[bullet.id] = bullet
 
-  updateShipStatus: (shipId, newData) ->
-    ship = @ships[shipId]
-    return unless ship
-    ship.updateStatus(newData)
+  updateShipAcceleration: (shipId, data) ->
+    @ships[shipId].accelerating = data.accelerating
+
+  updateShipDirection: (shipId, data) ->
+    @ships[shipId].direction = data.direction
 
   removeShip: (id)->
     delete @ships[id]

@@ -36,8 +36,10 @@ gotData= (shipId, data)->
 #  console.log("got data for ship id: %d and data: #{data}", shipId)
   data = JSON.parse(data)
   switch data.action
-    when 'shipStatus'
-      gameInstance.updateShipStatus(shipId, data.params)
+    when 'shipDirection'
+      gameInstance.updateShipDirection(shipId, data.params)
+    when 'shipAccelerator'
+      gameInstance.updateShipAcceleration(shipId, data.params)
     when 'shipFired'
       gameInstance.shipFired(shipId)
 
