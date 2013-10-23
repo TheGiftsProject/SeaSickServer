@@ -11,7 +11,7 @@ wss.broadcast = (data) ->
   wss.clients.forEach (client)->
     data.params.playerShipId = client.shipId
     serializedData = JSON.stringify(data)
-    console.log serializedData
+#    console.log serializedData
     client.send(serializedData)
 
 
@@ -38,15 +38,17 @@ gotData= (shipId, data)->
   switch data.action
     when 'shipStatus'
       gameInstance.updateShipStatus(shipId, data.params)
+    when 'shipFired'
+      gameInstance.shipFired(shipId)
 
 #calculateLoop = null;
 runLoop = ->
-  gameInstance.runFrame(->
+  gameInstance.runFrame((executionTime)->
     wss.broadcast({
       action: 'gameState'
       params: gameInstance.currentStatus()
     })
-    setTimeout((=>runLoop()), 16)
+    setTimeout((=>runLoop()), 16 - executionTime)
   )
 
 runLoop()

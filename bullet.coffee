@@ -1,24 +1,64 @@
 _ = require('lodash')
+helper = require('./helpers');
+
+
+_calculateInitialVelocity= (direction, initialSpeed, initialVelocity)->
+  x = Math.cos(direction)
+  y = Math.sin(direction)
+  helper.addVectors(helper.multVector([x, y], initialSpeed), initialVelocity)
+
+
+lastBulletId = 1
 
 class Bullet
-  constructor: ->
+  constructor: (options = {})->
     defaultOptions =
       position: [Math.random(), Math.random()]
       velocity: [0.08, 0.09]
-      frames: 0
+      maxTravelDistance: 1
+      initialSpeed: 0.01
+      direction: null
+      shipId: 0
+      active: true
 
     options = _.merge(defaultOptions, options)
 
+    @maxTravelDistance = options.maxTravelDistance
+    @initialPosition = options.position;
     @position = options.position
-    @velocity = options.velocity
-    @frames = options.frames
+    @shipId = options.shipId
+    @velocity = _calculateInitialVelocity(options.direction,
+                                          options.initialSpeed,
+                                          options.velocity)
+    @active = options.active
 
-  needToDelete: ->
-    @frames >= 1000
+    @id= lastBulletId++
+
+    console.log("created bullet with velocity: #{@velocity} position: #{@position} initialPosition: #{@initialPosition}")
+
+
+  markForDeletion: ->
+    @active = false
+
+  isMarkedForDeletion: ->
+    @active
+
   runFrame: (timeDiff)->
-    @position = [@velocity[0] * timeDiff, @velocity[1] * timeDiff]
-    @position[0] -= 1 if @position[0] > 1
-    @position[1] -= 1 if @position[1] > 1
-    @velocity = [@velocity[0] * 0.9999, @velocity[1] * 0.9999]
-    @velocity[0] -= 1 if @velocity[0] > 1
-    @velocity[1] -= 1 if @velocity[1] > 1
+    velocityWithTime = helper.multVector(@velocity, timeDiff)
+    @position = helper.addVectors(@position, velocityWithTime)
+
+    @position[0] = @position[0] % 1
+    @position[0] = 1 - @position[0] if @position[0] < 0
+    @position[1] = @position[1] % 1
+    @position[1] = 1 - @position[1] if @position[1] < 0
+
+    @velocity = [@velocity[0], @velocity[1]]
+    @velocity[0] = Math.max(0, Math.min(@velocity[0], 1));
+    @velocity[1] = Math.max(0, Math.min(@velocity[1], 1));
+    needToRemove = helper.squareDistanceBetweenVectors(@position,@initialPosition) >= @maxTravelDistance * @maxTravelDistance
+    @markForDeletion() if needToRemove
+    console.log("bullet moved to #{@position} with velocity #{@velocity}")
+
+
+
+module.exports = Bullet

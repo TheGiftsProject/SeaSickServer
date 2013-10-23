@@ -1,4 +1,5 @@
 _ = require('lodash')
+Bullet = require('./bullet')
 
 lastShipId = 1
 class Ship
@@ -9,6 +10,7 @@ class Ship
       position: [Math.random(), Math.random()]
       velocity: [Math.random(), Math.random()]
       score: 0
+      size: 0.025
 
     options = _.merge(defaultOptions, options)
 
@@ -18,6 +20,7 @@ class Ship
     @velocity = options.velocity
     @score = options.score
     @direction = options.direction
+    @size = options.size
 
   serialize: ->
     id: @id
@@ -26,6 +29,17 @@ class Ship
     position: @position
     velocity: @velocity
     direction: @direction
+
+  fire:->
+    new Bullet(
+      position: [@position[0], @position[1]]
+      velocity: [@velocity[0], @velocity[1]]
+      direction: @direction
+      shipId: @id
+    )
+
+  wasHit: ->
+    @health -= 1
 
   updateStatus: (data)->
     @position = data.position

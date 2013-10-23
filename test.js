@@ -3,16 +3,12 @@ var ws = new WebSocket('ws://127.0.0.1:8088');
 
 ws.on('open', function () {
   console.log('connected');
-//  var doUpdate ={
-//    action: 'aa',
-//    params: [{
-//      id: 1,
-//      velocity: [0, Math.random()],
-//      position: [1,2]
-//    }]
-//  }
-//  ws.send(JSON.stringify(doUpdate));
+  var fire ={
+    action: 'shipFired'
+  };
+  ws.send(JSON.stringify(fire));
 });
+
 ws.on('close', function () {
   console.log('disconnected');
 });
