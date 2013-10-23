@@ -33,8 +33,6 @@ class Ship
     @direction = data.direction
 
   runFrame: (timeDiff)->
-    console.log("ship ", @position)
-    debugger
     @position = [@velocity[0]*timeDiff, @velocity[1]*timeDiff]
     @position[0] = Math.abs(@position[0] % 1) if @position[0]>1 || @position[0] < 0
     @position[1] = Math.abs(@position[1] % 1) if @position[1]>1 || @position[1] < 0

@@ -14,6 +14,8 @@ wss.broadcast = (data) ->
     console.log serializedData
     client.send(serializedData)
 
+
+
 wss.on('connection', (ws) ->
   util.log('client connected')
   shipId = gameInstance.initiateShip()
@@ -26,6 +28,9 @@ wss.on('connection', (ws) ->
   )
 
 )
+for i in [1..50]
+  gameInstance.initiateShip()
+
 
 setImmediate(=> runLoop() )
 

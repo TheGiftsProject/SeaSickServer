@@ -46,6 +46,7 @@ class Game
     if Object.keys(@ships).length
       currTime = getNanoSec()
       diff = (currTime - @lastUpdate) / 1000000000
+#      console.log("took %dms to run", (currTime - @lastUpdate)/ 1000000)
       _.each(@ships,(ship, shipId)->
         ship.runFrame(diff)
       )
@@ -53,7 +54,7 @@ class Game
         bullet.runFrame(diff)
         @removeBullet(bulletId) if bullet.needToDelete()
       )
-
+      @lastUpdate = getNanoSec()
     setTimeout((->cb()), 0)
 
 
