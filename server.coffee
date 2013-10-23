@@ -28,11 +28,9 @@ wss.on('connection', (ws) ->
   )
 
 )
-for i in [1..50]
+for i in [1..5]
   gameInstance.initiateShip()
 
-
-setImmediate(=> runLoop() )
 
 gotData= (shipId, data)->
 #  console.log("got data for ship id: %d and data: #{data}", shipId)
@@ -48,6 +46,7 @@ runLoop = ->
       action: 'gameState'
       params: gameInstance.currentStatus()
     })
-    setImmediate(=>runLoop())
+    setTimeout((=>runLoop()), 16)
   )
 
+runLoop()
