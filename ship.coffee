@@ -9,7 +9,7 @@ class Ship
       direction: Math.random()*Math.PI*2
       health: 100
       position: [Math.random(), Math.random()]
-      velocity: [Math.random(), Math.random()]
+      velocity: [0, 0] #[Math.random(), Math.random()]
       score: 0
       size: 0.025
       accelerating: false
@@ -55,14 +55,15 @@ class Ship
     if (@accelerating)
       accelVector = Helper.multVector([Math.cos(@direction), Math.sin(@direction)], @acceleration)
       @velocity = Helper.addVectors(@velocity, Helper.multVector(accelVector, timeDiff))
-    @position = [@position[0] + @velocity[0]*timeDiff, @position[1] + @velocity[1]*timeDiff]
+
+    @position = Helper.addVectors(@position, Helper.multVector(@velocity, timeDiff))
     @position[0] = @position[0] % 1
     @position[0] = 1 - @position[0] if @position[0] < 0
     @position[1] = @position[1] % 1
     @position[1] = 1 - @position[1] if @position[1] < 0
 
-    @velocity = [@velocity[0]*0.9999, @velocity[1]*0.9999]
-    @velocity[0] = Math.max(0, Math.min(@velocity[0], 1));
-    @velocity[1] = Math.max(0, Math.min(@velocity[1], 1));
+    @velocity = [@velocity[0]*0.99, @velocity[1]*0.99]
+    @velocity[0] = Math.max(-1, Math.min(@velocity[0], 1));
+    @velocity[1] = Math.max(-1, Math.min(@velocity[1], 1));
 
 module.exports = Ship
