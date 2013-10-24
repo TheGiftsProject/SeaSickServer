@@ -77,13 +77,15 @@ class Game
   detectCollisions: ()->
     _.each(@bullets, (bullet)=>
       _.each(@ships, (ship)->
-        if (ship.health>0 && bullet.shipId!=ship.id && !bullet.isMarkedForDeletion())
+        if (ship.isAlive() && bullet.shipId != ship.id && !bullet.isMarkedForDeletion())
           collisionHappened = Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size
           if collisionHappened
             console.log("KABOOM! shipId = " + ship.id + ", bullet ship id = " + bullet.shipId)
             bullet.markForDeletion()
             ship.wasHit()
-
+            if (!ship.isAlive()) {
+              @ships[bullet.shipId].killedOtherShip()
+            }
       )
     )
 

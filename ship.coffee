@@ -54,6 +54,12 @@ class Ship
   wasHit: ->
     @health -= 1
 
+  isAlive: ->
+    @health > 0
+
+  killedOtherShip: ->
+    @score += 1
+
   setAccelerating: (accelerating) ->
     @accelerating = accelerating
 
