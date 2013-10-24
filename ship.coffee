@@ -11,7 +11,7 @@ class Ship
     defaultOptions =
       direction: Math.random()*Math.PI*2
       position: randomizePosition()
-      velocity: [0, 0] #[Math.random(), Math.random()]
+      velocity: [0, 0]
       score: 0
       size: 0.025
       accelerating: false
@@ -23,16 +23,17 @@ class Ship
     options = _.merge(defaultOptions, options)
 
     @id = lastShipId++
-    @health = options.initialHealth
-    @initialHealth = options.initialHealth
-    @respawnTime = options.respawnTime
+    @direction = options.direction
     @position = options.position
     @velocity = options.velocity
     @score = options.score
-    @direction = options.direction
     @size = options.size
     @accelerating = options.accelerating
-    @acceleration = 3
+    @acceleration = options.acceleration
+    @timeSinceDeath = options.timeSinceDeath
+    @health = options.initialHealth
+    @initialHealth = options.initialHealth
+    @respawnTime = options.respawnTime
 
   serialize: ->
     id: @id
@@ -53,16 +54,14 @@ class Ship
   wasHit: ->
     @health -= 1
 
-  updateStatus: (data)->
-    @position = data.position
-    @velocity = data.velocity
-    @direction = data.direction
+  setAccelerating: (accelerating) ->
+    @accelerating = accelerating
 
   runFrame: (timeDiff)->
     if (@health == 0)
-      timeSinceDeath += timeDiff
-      if (timeSinceDeath > @respawnTime)
-        timeSinceDeath = 0
+      @timeSinceDeath += timeDiff
+      if (@timeSinceDeath > @respawnTime)
+        @timeSinceDeath = 0
         @health = @initialHealth
         @position = randomizePosition()
         @velocity = [0, 0]
