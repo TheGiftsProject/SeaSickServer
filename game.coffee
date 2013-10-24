@@ -28,6 +28,10 @@ class Game
   initiateShip: ->
     ship = new Ship()
     @ships[ship.id] = ship
+    shipsArray = _.values(@ships)
+    if (shipsArray.length > 1)
+      diffVector = Helper.subVectors(shipsArray[shipsArray.length-2].position, ship.position)
+      ship.direction = Math.atan2(diffVector[1], diffVector[0])
     ship.id
 
   shipFired: (shipId)->
@@ -82,8 +86,6 @@ class Game
 
   detectShipCollisions: ()->
     ships = _.values(@ships)
-    #for (i = 0; i < ships.length; ++i)
-      #for (j = 0; j < i; ++j)
     for i in [0...ships.length]
       for j in [0...i]
         ship1 = ships[i]

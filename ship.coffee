@@ -62,8 +62,10 @@ class Ship
     @score += 1
 
   collidedWith: (other) ->
-    normal = Helper.subVectors(other.position, @position)
-    @velocity = Helper.reflectVector(@velocity, normal)
+    normal = Helper.subVectors(@position, other.position)
+    if (Math.abs(@velocity[0]) > 0.000001 || Math.abs(@velocity[1]) > 0.000001)
+      reflectVector = Helper.reflectVector(@velocity, normal)
+      @velocity = Helper.multVector(reflectVector, Helper.vecLength(@velocity))
 
   setAccelerating: (accelerating) ->
     @accelerating = accelerating

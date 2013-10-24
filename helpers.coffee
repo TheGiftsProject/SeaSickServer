@@ -26,11 +26,14 @@ class Helpers
   @reflectVector: (v, normal) ->
     v = @normalizeVector(v)
     normal = @normalizeVector(normal)
-    @subVectors(@multVector(v, 2*@dot(v, normal)), v)
+    @normalizeVector(@subVectors(@multVector(v, 2*@dot(v, normal)), v))
 
   @getNanoSec = ->
     time = process.hrtime()
     time[0] * 1e9 + time[1]
+
+  @printVec: (v) ->
+    "#{v[0]}, #{v[1]}"
 
 
 module.exports = Helpers

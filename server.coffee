@@ -11,6 +11,7 @@ gameInstance = new Game()
 
 wss.broadcast = (data) ->
   return unless wss.clients.length
+  #console.log(JSON.stringify(data))
   wss.clients.forEach (client)->
     data.params.playerShipId = client.shipId
     serializedData = JSON.stringify(data)
@@ -31,8 +32,8 @@ wss.on('connection', (ws) ->
   )
 
 )
-for i in [1..5]
-  gameInstance.initiateShip()
+#for i in [1..5]
+gameInstance.initiateShip()
 
 
 gotData= (shipId, data)->
