@@ -68,8 +68,8 @@ class Game
     setTimeout((->cb(diff)), 0)
 
   detectCollisions: ()->
-    _.each(@bullets, (bullet)=>
-      _.each(@ships, (ship)->
+    _.each(@bullets, (bullet) =>
+      _.each(@ships, (ship) =>
         if (ship.isAlive() && bullet.shipId != ship.id && !bullet.isMarkedForDeletion())
           collisionHappened = Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size
           if collisionHappened
