@@ -15,18 +15,18 @@ class Bullet
     defaultOptions =
       position: [Math.random(), Math.random()]
       velocity: [0.08, 0.09]
-      maxTravelDistance: 1
-      initialSpeed: 0.01
+      maxLifeTime: 1
       direction: null
       shipId: 0
       active: true
+      timeSinceStart: 0
 
     options = _.merge(defaultOptions, options)
 
     @maxTravelDistance = options.maxTravelDistance
-    @initialPosition = options.position;
     @position = options.position
     @shipId = options.shipId
+    @maxLifeTime = options.maxLifeTime
     @velocity = _calculateInitialVelocity(options.direction,
                                           options.initialSpeed,
                                           options.velocity)
@@ -48,6 +48,7 @@ class Bullet
     !@active
 
   runFrame: (timeDiff)->
+    timeSinceStart += timeDiff
     velocityWithTime = helper.multVector(@velocity, timeDiff)
     @position = helper.addVectors(@position, velocityWithTime)
 
@@ -58,7 +59,7 @@ class Bullet
 
     @velocity[0] = Math.max(-1, Math.min(@velocity[0], 1));
     @velocity[1] = Math.max(-1, Math.min(@velocity[1], 1));
-    needToRemove = helper.squareDistanceBetweenVectors(@position,@initialPosition) >= @maxTravelDistance * @maxTravelDistance
+    needToRemove = timeSinceStart > @maxLifeTime
     console.log("Need to remove bullet") if needToRemove
     @markForDeletion() if needToRemove
     console.log("bullet moved to #{@position} with velocity #{@velocity}")
