@@ -56,9 +56,8 @@ class Bullet
     @position[1] = @position[1] % 1
     @position[1] = 1 - @position[1] if @position[1] < 0
 
-    @velocity = [@velocity[0], @velocity[1]]
-    @velocity[0] = Math.max(0, Math.min(@velocity[0], 1));
-    @velocity[1] = Math.max(0, Math.min(@velocity[1], 1));
+    @velocity[0] = Math.max(-1, Math.min(@velocity[0], 1));
+    @velocity[1] = Math.max(-1, Math.min(@velocity[1], 1));
     needToRemove = helper.squareDistanceBetweenVectors(@position,@initialPosition) >= @maxTravelDistance * @maxTravelDistance
     console.log("Need to remove bullet") if needToRemove
     @markForDeletion() if needToRemove
