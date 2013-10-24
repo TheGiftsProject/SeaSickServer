@@ -36,12 +36,16 @@ class Bullet
 
     console.log("created bullet with velocity: #{@velocity} position: #{@position} initialPosition: #{@initialPosition}")
 
+  serialize: ->
+    id: @id
+    position: @position
+    velocity: @velocity
 
   markForDeletion: ->
     @active = false
 
   isMarkedForDeletion: ->
-    @active
+    !@active
 
   runFrame: (timeDiff)->
     velocityWithTime = helper.multVector(@velocity, timeDiff)
@@ -56,6 +60,7 @@ class Bullet
     @velocity[0] = Math.max(0, Math.min(@velocity[0], 1));
     @velocity[1] = Math.max(0, Math.min(@velocity[1], 1));
     needToRemove = helper.squareDistanceBetweenVectors(@position,@initialPosition) >= @maxTravelDistance * @maxTravelDistance
+    console.log("Need to remove bullet") if needToRemove
     @markForDeletion() if needToRemove
     console.log("bullet moved to #{@position} with velocity #{@velocity}")
 

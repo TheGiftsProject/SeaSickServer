@@ -29,6 +29,7 @@ class Game
 
   currentStatus: ->
       ships: _.map(@ships, (ship)-> ship.serialize())
+      bullets: _.map(@bullets, (bullet) -> bullet.serialize())
 
   initiateShip: ->
     ship = new Ship()
@@ -52,7 +53,6 @@ class Game
 
   deletedMarkedBullets: ->
     _.each(@bullets, (bullet, bulletId)=>
-      debugger
       removeBullet(@bullets, bulletId) if bullet.isMarkedForDeletion()
     )
 
@@ -60,7 +60,6 @@ class Game
     if Object.keys(@ships).length
       currTime = getNanoSec()
       diff = (currTime - @lastUpdate) / 1000000000
-#      console.log("took %dms to run", (currTime - @lastUpdate)/ 1000000)
       _.each(@ships,(ship, shipId)->
         ship.runFrame(diff)
       )
@@ -76,11 +75,12 @@ class Game
     setTimeout((->cb(diff)), 0)
 
   detectCollisions: ()->
-    _.each(@bullets, (bullet, bulletId)=>
-      _.each(@ships, (ship, shipId)->
-        if (ship.health>0 && bullet.shipId!=shipId && !bullet.isMarkedForDeletion())
+    _.each(@bullets, (bullet)=>
+      _.each(@ships, (ship)->
+        if (ship.health>0 && bullet.shipId!=ship.id && !bullet.isMarkedForDeletion())
           collisionHappened = Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size
           if collisionHappened
+            console.log("KABOOM! shipId = " + ship.id + ", bullet ship id = " + bullet.shipId)
             bullet.markForDeletion()
             ship.wasHit()
 
