@@ -15,8 +15,8 @@ class Bullet
     defaultOptions =
       position: [Math.random(), Math.random()]
       velocity: [0.08, 0.09]
-      maxLifeTime: 1
-      initialSpeed: 0.07
+      maxLifeTime: 3
+      initialSpeed: 0.5
       direction: null
       shipId: 0
       active: true
