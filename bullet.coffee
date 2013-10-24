@@ -32,10 +32,7 @@ class Bullet
                                           options.initialSpeed,
                                           options.velocity)
     @active = options.active
-
     @id= lastBulletId++
-
-    console.log("created bullet with velocity: #{@velocity} position: #{@position} initialPosition: #{@initialPosition}")
 
   serialize: ->
     id: @id
@@ -61,9 +58,7 @@ class Bullet
     @velocity[0] = Math.max(-1, Math.min(@velocity[0], 1));
     @velocity[1] = Math.max(-1, Math.min(@velocity[1], 1));
     needToRemove = @timeSinceStart > @maxLifeTime
-    console.log("Need to remove bullet") if needToRemove
     @markForDeletion() if needToRemove
-    console.log("bullet moved to #{@position} with velocity #{@velocity}")
 
 
 

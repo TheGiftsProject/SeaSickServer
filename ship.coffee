@@ -51,14 +51,19 @@ class Ship
       shipId: @id
     )
 
-  wasHit: ->
+  wasHit: (bulletVelocity) ->
     @health -= 1
+    @velocity = Helper.addVectors(@velocity, Helper.multVector(bulletVelocity, 0.01))
 
   isAlive: ->
     @health > 0
 
   killedOtherShip: ->
     @score += 1
+
+  collidedWith: (other) ->
+    normal = Helper.subVectors(other.position, @position)
+    @velocity = Helper.reflectVector(@velocity, normal)
 
   setAccelerating: (accelerating) ->
     @accelerating = accelerating

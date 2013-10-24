@@ -3,13 +3,7 @@ Ship = require('./ship.coffee')
 Helper = require('./helpers');
 _ = require('lodash')
 
-
-getNanoSec = ->
-  time = process.hrtime()
-  time[0] * 1e9 + time[1]
-
 removeBullet = (bullets, bulletId)->
-  console.log("deleting bullets")
   delete bullets[bulletId]
 
 class Game
@@ -18,7 +12,7 @@ class Game
       boardWidth: 1
       boardHeight: 1
 
-    @lastUpdate = getNanoSec()
+    @lastUpdate = Helper.getNanoSec()
 
     @options = _.merge(defaultOptions, @options)
 
@@ -33,12 +27,10 @@ class Game
 
   initiateShip: ->
     ship = new Ship()
-    console.log("created ship %j", ship)
     @ships[ship.id] = ship
     ship.id
 
   shipFired: (shipId)->
-    console.log("ship fired")
     bullet = @ships[shipId].fire()
     @bullets[bullet.id] = bullet
 
@@ -58,7 +50,7 @@ class Game
 
   runFrame: (cb)->
     if Object.keys(@ships).length
-      currTime = getNanoSec()
+      currTime = Helper.getNanoSec()
       diff = (currTime - @lastUpdate) / 1000000000
       _.each(@ships,(ship, shipId)->
         ship.runFrame(diff)
@@ -68,9 +60,10 @@ class Game
       )
 
       @detectCollisions()
+      @detectShipCollisions()
       @deletedMarkedBullets()
 
-      @lastUpdate = getNanoSec()
+      @lastUpdate = Helper.getNanoSec()
 
     setTimeout((->cb(diff)), 0)
 
@@ -80,14 +73,27 @@ class Game
         if (ship.isAlive() && bullet.shipId != ship.id && !bullet.isMarkedForDeletion())
           collisionHappened = Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size
           if collisionHappened
-            console.log("KABOOM! shipId = " + ship.id + ", bullet ship id = " + bullet.shipId)
             bullet.markForDeletion()
-            ship.wasHit()
-            if (!ship.isAlive()) {
+            ship.wasHit(bullet.velocity)
+            if (!ship.isAlive())
               @ships[bullet.shipId].killedOtherShip()
-            }
       )
     )
+
+  detectShipCollisions: ()->
+    ships = _.values(@ships)
+    #for (i = 0; i < ships.length; ++i)
+      #for (j = 0; j < i; ++j)
+    for i in [0...ships.length]
+      for j in [0...i]
+        ship1 = ships[i]
+        ship2 = ships[j]
+        if (ship1.id != ship2.id)
+          collisionHappened = Helper.squareDistanceBetweenVectors(ship1.position, ship2.position) <= (ship1.size+ship2.size)*(ship1.size+ship2.size)
+          if (collisionHappened)
+            ship1.collidedWith(ship2)
+            ship2.collidedWith(ship1)
+    null
 
 
 module.exports = Game
