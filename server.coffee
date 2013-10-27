@@ -2,7 +2,7 @@ util = require('util')
 Game = require('./game')
 Helper = require('./helpers')
 WebSocketServer = require('ws').Server
-port = 8088
+port = process.env.PORT || 8088
 wss = new WebSocketServer({port: port})
 
 console.log("Started server on port: #{port}")
