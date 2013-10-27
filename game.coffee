@@ -81,7 +81,7 @@ class Game
     _.each(@bullets, (bullet) =>
       _.each(@ships, (ship) =>
         if (ship.isAlive() && bullet.shipId != ship.id && !bullet.isMarkedForDeletion())
-          collisionHappened = Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size
+          collisionHappened = (Helper.squareDistanceBetweenVectors(bullet.position, ship.position) <= ship.size*ship.size) && !ship.isImmune
           if collisionHappened
             bullet.markForDeletion()
             ship.wasHit(bullet.velocity)

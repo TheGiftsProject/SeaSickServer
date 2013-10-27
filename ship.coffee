@@ -19,6 +19,8 @@ class Ship
       timeSinceDeath: 0
       initialHealth: 5
       respawnTime: 3
+      immunityTime: 3
+      timeSinceImmunity: 0
 
     options = _.merge(defaultOptions, options)
 
@@ -34,6 +36,9 @@ class Ship
     @health = options.initialHealth
     @initialHealth = options.initialHealth
     @respawnTime = options.respawnTime
+    @immunityTime = options.immunityTime
+    @timeSinceImmunity = options.timeSinceImmunity
+    @isImmune = true
 
   serialize: ->
     id: @id
@@ -42,6 +47,7 @@ class Ship
     position: @position
     velocity: @velocity
     direction: @direction
+    isImmune: @isImmune
 
   fire:->
     new Bullet(
@@ -78,7 +84,14 @@ class Ship
         @health = @initialHealth
         @position = randomizePosition()
         @velocity = [0, 0]
+        @isImmune = true
     else
+      if (@isImmune)
+        @timeSinceImmunity += timeDiff
+        if (@timeSinceImmunity > @immunityTime)
+          @timeSinceImmunity = 0
+          @isImmune = false
+
       if (@accelerating)
         accelVector = Helper.multVector([Math.cos(@direction), Math.sin(@direction)], @acceleration)
         @velocity = Helper.addVectors(@velocity, Helper.multVector(accelVector, timeDiff))
