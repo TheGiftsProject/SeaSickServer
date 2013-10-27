@@ -1,9 +1,18 @@
 util = require('util')
 Game = require('./game')
 Helper = require('./helpers')
+express = require('express')
+app = express()
 WebSocketServer = require('ws').Server
 port = process.env.PORT || 8088
-wss = new WebSocketServer({port: port})
+
+
+app.use(express.static(__dirname + '/'));
+
+server = http.createServer(app);
+server.listen(port);
+
+wss = new WebSocketServer({server: server})
 
 console.log("Started server on port: #{port}")
 
