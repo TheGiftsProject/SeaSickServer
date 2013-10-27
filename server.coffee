@@ -30,6 +30,9 @@ wss.on('connection', (ws) ->
   ws.on('message', (data)=>
       gotData(shipId, data)
   )
+  ws.on('score', =>
+    ws.send(JSON.stringify({ action: "score", params: gameInstance.getScore() }))
+  )
 
 )
 #for i in [1..5]

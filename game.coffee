@@ -25,6 +25,13 @@ class Game
       ships: _.map(@ships, (ship)-> ship.serialize())
       bullets: _.map(@bullets, (bullet) -> bullet.serialize())
 
+  getScore: ->
+    scores = {}
+    _.each(@ships, (ship) ->
+      scores[ship.id] = ship.score
+    )
+    scores
+
   initiateShip: ->
     ship = new Ship()
     @ships[ship.id] = ship
