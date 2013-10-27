@@ -97,7 +97,7 @@ class Game
       for j in [0...i]
         ship1 = ships[i]
         ship2 = ships[j]
-        if (ship1.id != ship2.id)
+        if (ship1.id != ship2.id && ship1.isAlive() && ship2.isAlive())
           collisionHappened = Helper.squareDistanceBetweenVectors(ship1.position, ship2.position) <= (ship1.size+ship2.size)*(ship1.size+ship2.size)
           if (collisionHappened)
             ship1.collidedWith(ship2)
