@@ -6,18 +6,23 @@ express = require('express')
 app = express()
 WebSocketServer = require('ws').Server
 port = process.env.PORT || 8088
+gameInstance = new Game()
 
 
 app.use(express.static(__dirname + '/'));
 
+app.get("/scores", (req, res) ->
+  res.json(gameInstance.getScore())
+)
+
 server = http.createServer(app);
 server.listen(port);
+
 
 wss = new WebSocketServer({server: server})
 
 console.log("Started server on port: #{port}")
 
-gameInstance = new Game()
 
 wss.broadcast = (data) ->
   return unless wss.clients.length
@@ -40,10 +45,6 @@ wss.on('connection', (ws) ->
   ws.on('message', (data)=>
       gotData(shipId, data)
   )
-  ws.on('score', =>
-    ws.send(JSON.stringify({ action: "score", params: gameInstance.getScore() }))
-  )
-
 )
 #for i in [1..5]
 gameInstance.initiateShip()
